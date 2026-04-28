@@ -1,10 +1,36 @@
+# ======================
+# SPRING BOOT / MAVEN
+# ======================
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# ======================
+# JAVA
+# ======================
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+
+# Packages
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# ======================
+# STS (Spring Tool Suite)
+# ======================
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +39,17 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+# ======================
+# INTELLIJ
+# ======================
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# ======================
+# NETBEANS
+# ======================
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,5 +59,20 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# ======================
+# VS CODE
+# ======================
 .vscode/
+
+# ======================
+# ENV / CONFIG (IMPORTANT)
+# ======================
+.env
+application-dev.properties
+application-prod.properties
+
+# ======================
+# OS
+# ======================
+.DS_Store
+Thumbs.db

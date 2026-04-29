@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.TPINF232.dto.formulaire.FormulaireRequest;
+import com.example.TPINF232.dto.formulaire.FormulaireResponse;
 import com.example.TPINF232.model.Formulaire;
 import com.example.TPINF232.model.Question;
 import com.example.TPINF232.model.Utilisateur;
@@ -105,5 +105,55 @@ public class FormulaireService {
     public List<Formulaire> getFormsByUser(int utilisateurId) {
 
         return formulaireRepository.findByUtilisateurId(utilisateurId);
+    }
+
+
+    public FormulaireResponse toResponse(Formulaire formulaire) {
+
+        FormulaireResponse response = new FormulaireResponse();
+        response.setId(formulaire.getId());
+        response.setTitre(formulaire.getTitre());
+        response.setDescription(formulaire.getDescription());
+        response.setDateCreation(formulaire.getDateCreation());
+
+        // Auteur
+        if (formulaire.getUtilisateur() != null) {
+            FormulaireResponse.AuteurInfo auteur = new FormulaireResponse.AuteurInfo();
+            auteur.setId(formulaire.getUtilisateur().getId());
+            auteur.setNom(formulaire.getUtilisateur().getNom());
+            auteur.setNomUtilisateur(formulaire.getUtilisateur().getNomUtilisateur());
+            response.setUtilisateur(auteur);
+        }
+
+        // Questions
+        if (formulaire.getQuestions() != null) {
+            List<FormulaireResponse.QuestionInfo> questions = formulaire.getQuestions().stream().map(q -> {
+                FormulaireResponse.QuestionInfo qi = new FormulaireResponse.QuestionInfo();
+                qi.setId(q.getId());
+                qi.setLabel(q.getLabel());
+                qi.setType(q.getType().name());
+                qi.setOptions(q.getOptions());
+                return qi;
+            })
+                    .collect(java.util.stream.Collectors.toList());
+            response.setQuestions(questions);
+        }
+
+        return response;
+    }
+
+    // Récupérer tous les formulaires sous forme de FormulaireResponse
+    public List<FormulaireResponse> getAllFormsAsResponse() {
+        return formulaireRepository.findAll()
+            .stream()
+            .map(this::toResponse)
+            .collect(java.util.stream.Collectors.toList());
+    }
+    
+    // Récupérer un formulaire par ID sous forme de FormulaireResponse
+    public FormulaireResponse getFormByIdAsResponse(int id) {
+        Formulaire formulaire = formulaireRepository.findById(id).orElse(null);
+        if (formulaire == null) return null;
+        return toResponse(formulaire);
     }
 }

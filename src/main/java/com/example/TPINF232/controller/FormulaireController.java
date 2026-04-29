@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TPINF232.dto.formulaire.FormulaireRequest;
+import com.example.TPINF232.dto.formulaire.FormulaireResponse;
 import com.example.TPINF232.model.Formulaire;
 import com.example.TPINF232.service.FormulaireService;
 
@@ -69,32 +70,28 @@ public class FormulaireController {
 
     // Récupérer un formulaire par son ID
     @GetMapping("/get/{id}")
-    public ResponseEntity<Formulaire> getForm(@PathVariable int id) {
+    public ResponseEntity<FormulaireResponse> getForm(@PathVariable int id) {
         try {
-            Formulaire form = formulaireService.getFormById(id);
-            
-            if (form != null) {
-                return ResponseEntity.ok(form);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
+            FormulaireResponse form = formulaireService.getFormByIdAsResponse(id);
+            if (form != null) return ResponseEntity.ok(form);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    
 
     // Récupérer tous les formulaires
     @GetMapping("/all")
-    public ResponseEntity<List<Formulaire>> getAllForms() {
+    public ResponseEntity<List<FormulaireResponse>> getAllForms() {
+        
         try {
-            List<Formulaire> formulaires = formulaireService.getAllForms();
-            
-            return ResponseEntity.ok(formulaires);
-
+        
+            return ResponseEntity.ok(formulaireService.getAllFormsAsResponse());
+        
         } catch (Exception e) {
-
+        
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -119,13 +116,13 @@ public class FormulaireController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteForm(@PathVariable int id) {
         try {
-            
+
             formulaireService.deleteForm(id);
-            
+
             return ResponseEntity.noContent().build();
-        
+
         } catch (Exception e) {
-            
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
